@@ -1,0 +1,5 @@
+﻿SELECT [Name], [Release Year], [LastName], [BirthYear]
+FROM MotionPictures
+LEFT JOIN MotionPictureDirectors ON MotionPictures.DirectorId = MotionPictureDirectors.DirectorId
+WHERE AcademyAward = 0
+ORDER BY [Release Year];
