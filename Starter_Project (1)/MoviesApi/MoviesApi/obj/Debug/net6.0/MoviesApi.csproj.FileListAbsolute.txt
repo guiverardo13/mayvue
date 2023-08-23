@@ -35,3 +35,40 @@ C:\Users\Student\Desktop\Mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debu
 C:\Users\Student\Desktop\Mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.pdb
 C:\Users\Student\Desktop\Mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.genruntimeconfig.cache
 C:\Users\Student\Desktop\Mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\ref\MoviesApi.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\appsettings.json
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\MoviesApi.exe
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\MoviesApi.deps.json
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\MoviesApi.runtimeconfig.json
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\MoviesApi.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\MoviesApi.pdb
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\Microsoft.OpenApi.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\System.Data.SqlClient.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.csproj.AssemblyReference.cache
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.AssemblyInfoInputs.cache
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.AssemblyInfo.cs
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.csproj.CoreCompileInputs.cache
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\staticwebassets\msbuild.MoviesApi.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\staticwebassets\msbuild.build.MoviesApi.props
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.MoviesApi.props
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.MoviesApi.props
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\staticwebassets.pack.json
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\scopedcss\bundle\MoviesApi.styles.css
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.csproj.CopyComplete
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\refint\MoviesApi.dll
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.pdb
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\MoviesApi.genruntimeconfig.cache
+C:\Users\Guilherme Verardo\Desktop\Mayvue Project\Mayvue Final\mayvue\Starter_Project (1)\MoviesApi\MoviesApi\obj\Debug\net6.0\ref\MoviesApi.dll

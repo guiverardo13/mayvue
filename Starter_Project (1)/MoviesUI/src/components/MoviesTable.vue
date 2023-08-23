@@ -161,9 +161,9 @@ export default {
 
 		async getMovieById(movieId) {
     		try {
-          if (this.newMovie && this.newMovie.id === movieId) {
-                alert("This movie was just added! Please refresh the page to see the movie details.");
-            } else {
+        //   if (this.newMovie && this.newMovie.id === movieId) {
+        //         alert("This movie was just added! Please refresh the page to see the movie details.");
+        //     } else {
 
         		let response = await api_getMovieById(movieId); 
 
@@ -173,7 +173,7 @@ export default {
             		this.selectedMovie = response; 
 
         		}
-         }
+        //  }
     		} catch (error) {
         		console.error("An error occurred:", error);
     		}
@@ -214,10 +214,8 @@ export default {
         if (newMovieId !== null) {
           // Update this.movies after successful addition
           this.movies.push(this.newMovie);
-
-          
-          
           this.showSuccessMessage();
+          this.getMovies();
           this.closeModal();
         } else {
           console.error("Failed to save the movie to the database.");
@@ -235,6 +233,7 @@ export default {
           // Update this.movies after successful deletion
           this.movies = this.movies.filter(movie => movie.id !== movieId);
           this.closeDeleteModal(); // Close the delete modal
+          this.getMovies();
         } else {
           console.error("Failed to delete the movie.");
         }
@@ -260,25 +259,26 @@ export default {
 		closeModal() {
       this.resetForm();
       this.isModalOpen = false;
+      this.getMovies();
     },
 
     openEditModal(movieId) {
-      if (this.newMovie && this.newMovie.id === movieId) {
-      alert("This movie was just added! Please refresh the page to make changes.");
-      } else {
+      // if (this.newMovie && this.newMovie.id === movieId) {
+      // alert("This movie was just added! Please refresh the page to make changes.");
+      // } else {
       this.getMovieById(movieId);
       this.newMovie = { ...this.selectedMovie };
       this.isEditModalOpen = true;
-      }
+      // }
 		},
 
     openDeleteModal(movie) {
-      if (this.newMovie && this.newMovie.id === movie.id) {
-      alert("This movie was just added! Please refresh the page to make changes.");
-      } else {
+      // if (this.newMovie && this.newMovie.id === movie.id) {
+      // alert("This movie was just added! Please refresh the page to make changes.");
+      // } else {
       this.currentDeleteMovie = movie;
       this.isDeleteModalOpen = true;
-      }
+      // }
     },
 
     closeDeleteModal() {

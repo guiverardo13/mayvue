@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { api_getAll, api_getMovieById } from '../api';
 export default {
     emits: ['closeEditModal', 'closeDeleteModal', 'confirmDelete', 'showDeleteMessage'],
     props: {
@@ -87,7 +88,7 @@ export default {
             this.$emit('confirmDelete', this.currentDeleteMovie.id);
             this.closeDeleteModal();
             this.showDeleteMessage();
-
+            api_getAll();
           }
       },
 
