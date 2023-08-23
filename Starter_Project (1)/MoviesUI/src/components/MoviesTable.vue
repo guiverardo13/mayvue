@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="movie in movies" :key="movie.ID">
+        <tr v-for="movie in movies" :key="movie.id">
           <td @click="getMovieById(movie.id)" class="clickable">
             {{ movie.name }}
           </td>
@@ -24,11 +24,11 @@
           <td>{{ movie.academyAward }}</td>
           <td>{{ movie.directorId }}</td>
           <td>
-            <span class="clickable m-2" @click="openEditModal(movie.ID)">
+            <span class="clickable m-2"  v-on:click.prevent="openEditModal(movie.id)">
               <font-awesome-icon icon="fa-solid fa-pen-to-square" />
             </span>
             <span class="clickable m-2">
-              <font-awesome-icon icon="fa-solid fa-trash" />
+              <font-awesome-icon icon="fa-solid fa-trash" v-on:click.prevent="openDeleteModal(movie)" />
             </span>
           </td>
         </tr>
@@ -45,7 +45,7 @@
       <p><strong>Release Year:</strong> {{ selectedMovie.releaseYear }}</p>
     </div>
   </div>  
-  <div class="bg-modal" v-show="isModalOpen">
+  <div class="add-movie-modal" v-show="isModalOpen">
     <div class="modal-content">
       <div id="close" @click="closeModal">+</div>
       <img src="public\logo.jpg" alt="logo" />
@@ -71,18 +71,20 @@
       </div>
         <div class="close-message" @click="showSuccess = false">+</div>
     </div>
-    <EditMoviesModal ref="editModalRef" :currentMovie="selectedMovie" v-if="isEditModalOpen" @closeModal="closeEditModal" @movie-edited="handleMovieEdited" />
   </div>
+  <edit-modal :isEditModalOpen="isEditModalOpen" :currentMovie="selectedMovie" @closeEditModal="closeEditModal" 
+            :isDeleteModalOpen="isDeleteModalOpen" @closeDeleteModal="closeDeleteModal" :currentDeleteMovie="currentDeleteMovie" 
+             @confirmDelete="deleteMovie" ></edit-modal>
 </template>
 
 <script>
 import { api_getAll, api_getMovieById, api_post, api_put, api_delete } from "../api.js";
-import EditMoviesModal from './EditMoviesModal.vue';
+import EditModal from "./EditModal.vue";
 
 export default {
   
   components: {
-    EditMoviesModal
+   EditModal
   },
 
 	props: [],
@@ -90,10 +92,11 @@ export default {
 		return {
 			movies: [],
 			selectedMovie: null,
-      localMovie: {...this.movie},
+      currentDeleteMovie: null,
 			isModalOpen: false,
-      isEditModalOpen: false,
       showSuccess: false,
+      isEditModalOpen: false,
+      isDeleteModalOpen: false,
 			newMovie: 
           {
             "name": '',
@@ -105,10 +108,30 @@ export default {
 		}
 	},
 
-	async mounted() {
-		this.getMovies();
-		this.getMovieById();
-	},
+    async mounted() {
+      this.getMovies();
+
+      try {
+    // Fetch movies data
+    const moviesResponse = await api_getAll();
+
+      if (moviesResponse === null) {
+        console.log("There was an error loading the list of movies.");
+      } else {
+        this.movies = moviesResponse;
+      }
+
+      // Check if there's a selected movie ID and fetch its details
+      if (this.selectedMovieId) {
+        const selectedMovieResponse = await api_getMovieById(this.selectedMovieId);
+        if (selectedMovieResponse !== null) {
+          this.selectedMovie = selectedMovieResponse;
+        }
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+},
 
 	methods: {
 		async getMovies() {
@@ -123,71 +146,111 @@ export default {
     		} catch (error) {
       				console.error("An error occurred:", error);
     		}
-		},
+		  },
+
+      async fetchNewlyAddedMovie(newMovieId) {
+        try {
+          const response = await api_getMovieById(newMovieId);
+          if (response !== null) {
+            this.selectedMovie = response;
+          }
+        } catch (error) {
+          console.error("An error occurred:", error);
+        }
+      },
 
 		async getMovieById(movieId) {
     		try {
+          if (this.newMovie && this.newMovie.id === movieId) {
+                alert("This movie was just added! Please refresh the page to see the movie details.");
+            } else {
+
         		let response = await api_getMovieById(movieId); 
 
         		if (response === null) {
             		console.log("There was an error loading the movie.");
         		} else {
             		this.selectedMovie = response; 
+
         		}
+         }
     		} catch (error) {
         		console.error("An error occurred:", error);
     		}
 		},
 
-	async addMovie() {
-    try {
-    // Checking if movie already exists
-    const movieWithSameNameExists = this.movies.some(movie => movie.name.toLowerCase() === this.newMovie.name.toLowerCase());
+    async addMovie() {
+      try {
+        const movieWithSameNameExists = this.movies.some(movie => movie.name.toLowerCase() === this.newMovie.name.toLowerCase());
+        const releaseYearPattern = /^\d{4}$/;
 
-    if (movieWithSameNameExists) {
-      console.error("Movie with the same ID or name already exists.");
-      alert("This movie already exists in your collection. Try again!");
-      this.resetForm();
-      window.location.reload(); // added this because alert was requiring user to refresh the page to add new movie
-      return; 
-    }
-      const success = await api_post(this.newMovie);
-      //check if movie exists
-      if (success) {
-        this.movies.push(this.newMovie);
-        
-        this.showSuccessMessage();
-        this.resetForm();
-        this.closeModal();
-      } else {
-        console.error("Failed to save the movie to the database.");
+        if (!releaseYearPattern.test(this.newMovie.releaseYear)) {
+          alert("Please enter a valid 4-digit release year.");
+          return;
+        }
+
+        const releaseYear = parseInt(this.newMovie.releaseYear);
+        const currentYear = new Date().getFullYear();
+
+        if (releaseYear < 1870 || releaseYear > currentYear) {
+          alert(`Release year must be between 1870 and ${currentYear}.`);
+          return;
+        }
+
+        if (movieWithSameNameExists) {
+          console.error("Movie with the same ID or name already exists.");
+          alert("This movie already exists in your collection. Try again!");
+          return;
+        }
+
+        if (this.newMovie.directorId !== null && (this.newMovie.directorId <= 0)) {
+          alert("Please enter a valid Director ID.");
+          return;
+        }
+
+        const newMovieId = await api_post(this.newMovie);
+        console.log("newMovieId:", this.newMovie.id);
+
+        if (newMovieId !== null) {
+          // Update this.movies after successful addition
+          this.movies.push(this.newMovie);
+
+          
+          
+          this.showSuccessMessage();
+          this.closeModal();
+        } else {
+          console.error("Failed to save the movie to the database.");
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
   },
-  
-		resetForm() {
-      		this.newMovie = { 
-        		name: '',
-       			description: '',
-        		releaseYear: '',
-        		academyAward: false,
-        		directorId: ''
-      		};
-		},
 
-   openEditModal(movieId) {
-    if (this.$refs.editModalRef) {
-      this.$refs.editModalRef.openModal(movieId);
-      this.isEditModalOpen = true; // Set the modal open state to true
-    } else {
-      console.error("EditMovieModal ref not found.");
-    }
+    async deleteMovie(movieId) {
+      try {
+        const response = await api_delete(movieId);
+
+        if (response.success) {
+          // Update this.movies after successful deletion
+          this.movies = this.movies.filter(movie => movie.id !== movieId);
+          this.closeDeleteModal(); // Close the delete modal
+        } else {
+          console.error("Failed to delete the movie.");
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
     },
 
-    closeEditModal() {
-      this.isEditModalOpen = false; // Set the modal open state to false
+    resetForm() {
+      this.newMovie = {
+        name: '',
+        description: '',
+        releaseYear: '',
+        academyAward: false,
+        directorId: null
+      };
     },
 
 		openModal() {
@@ -199,21 +262,50 @@ export default {
       this.isModalOpen = false;
     },
 
-		closeSelectedMovie() {
-			this.selectedMovie = false;
+    openEditModal(movieId) {
+      if (this.newMovie && this.newMovie.id === movieId) {
+      alert("This movie was just added! Please refresh the page to make changes.");
+      } else {
+      this.getMovieById(movieId);
+      this.newMovie = { ...this.selectedMovie };
+      this.isEditModalOpen = true;
+      }
 		},
+
+    openDeleteModal(movie) {
+      if (this.newMovie && this.newMovie.id === movie.id) {
+      alert("This movie was just added! Please refresh the page to make changes.");
+      } else {
+      this.currentDeleteMovie = movie;
+      this.isDeleteModalOpen = true;
+      }
+    },
+
+    closeDeleteModal() {
+      this.isDeleteModalOpen = false;
+    },
+
+    closeEditModal() {
+      this.isEditModalOpen = false;
+      this.selectedMovie = null
+    },
+
+		closeSelectedMovie() {
+			this.selectedMovie = null;
+		},
+
     showSuccessMessage() {
       this.showSuccess = true;
       setTimeout(() => {
       this.showSuccess = false;
-    }, 4000);
-  }
+      }, 1500);
+    },
   }
 }
 </script>
 
 <style>
-.bg-modal {
+.add-movie-modal {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
@@ -266,7 +358,7 @@ export default {
   flex-direction: column;
 }
 
-.bg-modal h2 {
+.add-movie-modal h2 {
   font-size: 25px;
 }
 
@@ -280,14 +372,15 @@ export default {
 }
 
 .success-message {
-   position: absolute;
-   top:10px;
+   position: fixed;
+   top: 12px;
    right: 15px;
    border-radius: 12px;
    background: white;
    padding: 20px 35px 20px 25px;
    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-   border-left: 6px solid rgb(63, 235, 63)
+   border-left: 6px solid rgb(63, 235, 63);
+   border-bottom: 4px solid rgb(63, 235, 63);
 }
 
 .success-message-content {
@@ -368,7 +461,13 @@ form > textarea {
   margin: 15px auto;
 }
 
-img {
+.add-movie-modal img {
+  width: 80px;
+  border-radius: 250px;
+  margin-bottom: 10px;
+}
+
+.selected-movie-modal img {
   width: 80px;
   border-radius: 250px;
   margin-bottom: 10px;
@@ -386,11 +485,6 @@ img {
 header {
   display: flex;
   margin-bottom: 10px;
-}
-
-section > button {
-  width: 100px;
-  font-size: 15px;
 }
 
 header > button {

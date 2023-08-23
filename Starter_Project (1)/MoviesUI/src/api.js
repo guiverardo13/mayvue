@@ -18,20 +18,18 @@ async function api_getAll() {
   }
 }
 
-async function api_getMovieById(movieId) {
-  let response;
-
+async function api_getMovieById(id) {
   try {
-    response = await fetch(API_URL + "api/Movies" + `/${movieId}`);
+    const response = await fetch(API_URL + "api/Movies" + `/${id}`);
 
     if (!response.ok) {
       throw new Error('Network response was not successful');
     }
-      return response.json();
 
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.log(error);
-
+    console.error('An error occurred:', error);
     return null;
   }
 }
@@ -42,27 +40,27 @@ async function api_post(payload) {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json", // Make sure this header is set
+        "Content-Type": "application/json", 
       },
       body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
       console.log("Request failed:", response.status, response.statusText);
-      return false;
+      return null; // Return null on failure
     }
 
-    return true;
+    const responseData = await response.json(); // Parse the response JSON
+    return responseData.id; // Return the new movie ID
   } catch (error) {
     console.log("Error:", error.message);
-    return false;
+    return null;
   }
 }
 
 async function api_put(payload) {
-  let response;
   try {
-    response = await fetch(API_URL + "api/Movies" + `/${payload.id}`, {
+    const response = await fetch(API_URL + "api/Movies" + `/${payload.id}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -70,25 +68,32 @@ async function api_put(payload) {
       },
       body: JSON.stringify(payload),
     });
+
+    if (!response.ok) {
+      return { success: false, error: "Failed to update the movie." };
+    }
+    
+    const responseData = await response.json();
+
+    return { success: true, data: responseData };
   } catch (error) {
-    console.log(error);
-  } finally {
-    if (!response || !response.ok) {
-      return false;
-    } else return true;
+    console.error(error);
+    return { success: false, error: "An error occurred while updating the movie." };
   }
 }
 
 async function api_delete(id) {
-  let response;
   try {
-    response = await fetch(API_URL + `api/Movies/${id}`, { method: "DELETE" });
+    const response = await fetch(API_URL + `api/Movies/${id}`, { method: "DELETE" });
+
+    if (!response.ok) {
+      return { success: false };
+    }
+
+    return { success: true };
   } catch (error) {
     console.log(error);
-  } finally {
-    if (!response || !response.ok) {
-      return false;
-    } else return true;
+    return { success: false };
   }
 }
 
