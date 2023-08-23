@@ -47,11 +47,11 @@ async function api_post(payload) {
 
     if (!response.ok) {
       console.log("Request failed:", response.status, response.statusText);
-      return null; // Return null on failure
+      return null; 
     }
-
-    const responseData = await response.json(); // Parse the response JSON
-    return responseData.id; // Return the new movie ID
+    
+    const responseData = await response.json();
+    return responseData.id; 
   } catch (error) {
     console.log("Error:", error.message);
     return null;

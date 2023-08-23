@@ -122,13 +122,12 @@ namespace MoviesApi.Repositories
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            return reader.Read(); // Returns true if a row is found, false otherwise
+                            return reader.Read(); 
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Instead of printing the error, you might consider throwing an exception or returning a custom error response
                     throw new Exception("An error occurred while checking movie existence.", ex);
                 }
             }
@@ -136,7 +135,41 @@ namespace MoviesApi.Repositories
  
         public Movie UpdateMovie(Movie movie)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "UPDATE MotionPictures SET Name = @Name, Description = @Description, [Release Year] = @ReleaseYear, AcademyAward = @AcademyAward, DirectorId = @DirectorId WHERE ID = @ID;";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@ID", movie.ID);
+                        command.Parameters.AddWithValue("@Name", movie.Name);
+                        command.Parameters.AddWithValue("@Description", movie.Description);
+                        command.Parameters.AddWithValue("@ReleaseYear", movie.ReleaseYear);
+                        command.Parameters.AddWithValue("@AcademyAward", movie.AcademyAward);
+                        command.Parameters.AddWithValue("@DirectorId", movie.DirectorId ?? (object)DBNull.Value);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            return movie;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    return null;
+                }
+            }
         }
 
         public bool DeleteMovie(int id)

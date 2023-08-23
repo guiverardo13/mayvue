@@ -4,13 +4,13 @@
             <div id="close" @click="closeEditModal">+</div>
             <img src="public\logo.jpg" alt="logo" />
             <h2>Edit Movie</h2>
-            <form>
+            <form @submit.prevent="submitEdit">
                 <input type="text" placeholder="Name" maxlength="50" v-model="editedMovie.name"/>
                 <textarea id="description" maxlength="500" placeholder="Description" v-model="editedMovie.description"></textarea>
                 <input type="text" placeholder="Release Year" maxlength="4" v-model="editedMovie.releaseYear">
                 <div class="wrapper">
                     <label for="academyAward">Academy Award: </label> 
-                    <input type="checkbox" id="academyAward" v-model="editedMovie.academyAward"/>
+                    <input type="checkbox" id="academyAward" v-model="editedMovie.academyAward" :checked="editedMovie.academyAward"/>
                 </div>
                 <input type="text" placeholder="DirectorId" v-model="editedMovie.directorId">
                 <button type="submit">Submit</button>
@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import { api_getAll, api_getMovieById } from '../api';
+import { api_getAll } from '../api';
 export default {
-    emits: ['closeEditModal', 'closeDeleteModal', 'confirmDelete', 'showDeleteMessage'],
+    emits: ['closeEditModal', 'closeDeleteModal', 'confirmDelete', 'showDeleteMessage', 'submitEdit'],
     props: {
         isEditModalOpen: Boolean,
         currentMovie: Object,
@@ -54,11 +54,11 @@ export default {
 		  return {
             showMessage: false,
             editedMovie: {
-                name: '',
-                description: '',
-                releaseYear: '',
-                academyAward: false,
-                directorId: null
+                "name": '',
+                "description": '',
+                "releaseYear": '',
+                "academyAward": false,
+                "directorId": null
             }
         }
     },
@@ -72,6 +72,13 @@ export default {
     },
 
     methods: {
+        async submitEdit() {
+          try {
+            this.$emit('submitEdit', this.editedMovie);
+          } catch (error) {
+            console.error("An error occurred during edit submission:", error);
+          }
+        },
 
         closeEditModal() {
             this.$emit('closeEditModal');

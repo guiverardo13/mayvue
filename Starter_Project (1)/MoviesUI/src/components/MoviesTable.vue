@@ -16,9 +16,7 @@
       </thead>
       <tbody>
         <tr v-for="movie in movies" :key="movie.id">
-          <td @click="getMovieById(movie.id)" class="clickable">
-            {{ movie.name }}
-          </td>
+          <td @click="getMovieById(movie.id)" class="clickable"> {{ movie.name }} </td>
           <td>{{ movie.description }}</td>
           <td>{{ movie.releaseYear }}</td>
           <td>{{ movie.academyAward }}</td>
@@ -74,7 +72,7 @@
   </div>
   <edit-modal :isEditModalOpen="isEditModalOpen" :currentMovie="selectedMovie" @closeEditModal="closeEditModal" 
             :isDeleteModalOpen="isDeleteModalOpen" @closeDeleteModal="closeDeleteModal" :currentDeleteMovie="currentDeleteMovie" 
-             @confirmDelete="deleteMovie" ></edit-modal>
+             @confirmDelete="deleteMovie" @submitEdit="submitEditHandler"></edit-modal>
 </template>
 
 <script>
@@ -97,6 +95,7 @@ export default {
       showSuccess: false,
       isEditModalOpen: false,
       isDeleteModalOpen: false,
+      editedMovie: null,
 			newMovie: 
           {
             "name": '',
@@ -110,27 +109,6 @@ export default {
 
     async mounted() {
       this.getMovies();
-
-      try {
-    // Fetch movies data
-    const moviesResponse = await api_getAll();
-
-      if (moviesResponse === null) {
-        console.log("There was an error loading the list of movies.");
-      } else {
-        this.movies = moviesResponse;
-      }
-
-      // Check if there's a selected movie ID and fetch its details
-      if (this.selectedMovieId) {
-        const selectedMovieResponse = await api_getMovieById(this.selectedMovieId);
-        if (selectedMovieResponse !== null) {
-          this.selectedMovie = selectedMovieResponse;
-        }
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
 },
 
 	methods: {
@@ -161,23 +139,18 @@ export default {
 
 		async getMovieById(movieId) {
     		try {
-        //   if (this.newMovie && this.newMovie.id === movieId) {
-        //         alert("This movie was just added! Please refresh the page to see the movie details.");
-        //     } else {
+          let response = await api_getMovieById(movieId); 
 
-        		let response = await api_getMovieById(movieId); 
-
-        		if (response === null) {
-            		console.log("There was an error loading the movie.");
-        		} else {
-            		this.selectedMovie = response; 
-
-        		}
-        //  }
-    		} catch (error) {
-        		console.error("An error occurred:", error);
-    		}
-		},
+          if (response === null) {
+              console.log("There was an error loading the movie.");
+          } else {
+              this.selectedMovie = response; 
+              this.selectedMovie.academyAward = !!this.movies.find(movie => movie.id === movieId).academyAward;
+          }
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+      },
 
     async addMovie() {
       try {
@@ -196,6 +169,7 @@ export default {
           alert(`Release year must be between 1870 and ${currentYear}.`);
           return;
         }
+        
 
         if (movieWithSameNameExists) {
           console.error("Movie with the same ID or name already exists.");
@@ -215,7 +189,6 @@ export default {
           // Update this.movies after successful addition
           this.movies.push(this.newMovie);
           this.showSuccessMessage();
-          this.getMovies();
           this.closeModal();
         } else {
           console.error("Failed to save the movie to the database.");
@@ -223,16 +196,64 @@ export default {
       } catch (error) {
         console.error("An error occurred:", error);
       }
-  },
+    },
+
+  async submitEditHandler(editedMovie) {
+      try {
+
+        const movieWithSameNameExists = this.movies.some(movie => movie.name.toLowerCase() === editedMovie.name.toLowerCase() && movie.id !== editedMovie.id);
+        const releaseYearPattern = /^\d{4}$/;  
+
+        if (movieWithSameNameExists) {
+          console.error("Movie with the same name already exists.");
+          alert("A movie with the same name already exists in your collection. Try again!");
+          return;
+        }
+        const releaseYear = parseInt(editedMovie.releaseYear);
+        const currentYear = new Date().getFullYear();
+
+        if (releaseYear < 1870 || releaseYear > currentYear) {
+          alert(`Release year must be between 1870 and ${currentYear}.`);
+          return;
+        }
+        
+        if (!releaseYearPattern.test(editedMovie.releaseYear)) { 
+          alert("Please enter a valid 4-digit release year.");
+          return;
+        }
+
+        if (editedMovie.directorId !== null && (editedMovie.directorId <= 0)) {
+          alert("Please enter a valid Director ID.");
+          return;
+        }
+        
+        const response = await api_put(editedMovie);
+
+        if (response !== null) {
+          
+          const updatedMovieList = await api_getAll();
+
+          if (updatedMovieList === null) {
+            console.log("There was an error loading the list of movies after edit.");
+          } else {
+            this.movies = updatedMovieList;
+            this.closeEditModal();
+          }
+        } else {
+          console.error("Failed to update the movie.");
+        }
+      } catch (error) {
+        console.error("An error occurred during edit submission:", error);
+      }
+    },
 
     async deleteMovie(movieId) {
       try {
         const response = await api_delete(movieId);
 
         if (response.success) {
-          // Update this.movies after successful deletion
           this.movies = this.movies.filter(movie => movie.id !== movieId);
-          this.closeDeleteModal(); // Close the delete modal
+          this.closeDeleteModal(); 
           this.getMovies();
         } else {
           console.error("Failed to delete the movie.");
@@ -263,22 +284,14 @@ export default {
     },
 
     openEditModal(movieId) {
-      // if (this.newMovie && this.newMovie.id === movieId) {
-      // alert("This movie was just added! Please refresh the page to make changes.");
-      // } else {
       this.getMovieById(movieId);
       this.newMovie = { ...this.selectedMovie };
       this.isEditModalOpen = true;
-      // }
 		},
 
     openDeleteModal(movie) {
-      // if (this.newMovie && this.newMovie.id === movie.id) {
-      // alert("This movie was just added! Please refresh the page to make changes.");
-      // } else {
       this.currentDeleteMovie = movie;
       this.isDeleteModalOpen = true;
-      // }
     },
 
     closeDeleteModal() {

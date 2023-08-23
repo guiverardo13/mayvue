@@ -88,6 +88,31 @@ namespace MoviesApi.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateMovie(int id, Movie movie)
+        {
+            if (id != movie.ID)
+            {
+                return BadRequest("ID in the route parameter does not match the ID in the movie object.");
+            }
+
+            if (!_movieRepository.MovieExists(id))
+            {
+                return NotFound("Movie with the specified ID was not found.");
+            }
+
+            Movie updatedMovie = _movieRepository.UpdateMovie(movie);
+
+            if (updatedMovie != null)
+            {
+                return Ok(updatedMovie);
+            }
+            else
+            {
+                return StatusCode(500, "An error occurred while updating the movie.");
+            }
+        }
     }
 
 }

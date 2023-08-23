@@ -1,20 +1,20 @@
-CREATE TABLE [dbo].[MotionPictures](
-	[ID] [int] NOT NULL IDENTITY(1,1) PRIMARY KEY,
-	[Name] [nvarchar](50) NOT NULL,
-	[Description] [nvarchar](500) NULL,
-	[Release Year] [int] NOT NULL,
-	[AcademyAward] [bit] NOT NULL,
-	[DirectorId] [int] NULL
-) ON [PRIMARY]
-GO
 
 CREATE TABLE [dbo].[MotionPictureDirectors](
-	[DirectorId] [int] NOT NULL,
-	[FirstName] [nvarchar](50) NOT NULL,
-	[LastName] [nvarchar](500) NULL,
-	[BirthYear] [int] NOT NULL,
-) ON [PRIMARY]
-GO
+    [DirectorId] [int] NOT NULL PRIMARY KEY,
+    [FirstName] [nvarchar](50) NOT NULL,
+    [LastName] [nvarchar](500) NULL,
+    [BirthYear] [int] NOT NULL
+) ON [PRIMARY];
+
+CREATE TABLE [dbo].[MotionPictures](
+    [ID] [int] NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    [Name] [nvarchar](50) NOT NULL,
+    [Description] [nvarchar](500) NULL,
+    [Release Year] [int] NOT NULL,
+    [AcademyAward] [bit] NOT NULL,
+    [DirectorId] [int] NULL,
+    FOREIGN KEY ([DirectorId]) REFERENCES [dbo].[MotionPictureDirectors]([DirectorId])
+) ON [PRIMARY];
 
 INSERT INTO [dbo].[MotionPictureDirectors]
            ([DirectorId]

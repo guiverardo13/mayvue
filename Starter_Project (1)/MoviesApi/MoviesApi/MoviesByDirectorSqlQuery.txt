@@ -3,3 +3,9 @@ FROM MotionPictures
 LEFT JOIN MotionPictureDirectors ON MotionPictures.DirectorId = MotionPictureDirectors.DirectorId
 WHERE AcademyAward = 0
 ORDER BY [Release Year];
+
+
+
+// Need to have MotionPicturesDirectors "DirectorId" as primary key
+// and MotionPictures "DirectorId" as foreign key referencing MotionPicturesDirectors "DirectorId" 
+// to complete the sql query successfully. 
